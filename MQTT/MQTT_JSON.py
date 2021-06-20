@@ -15,6 +15,15 @@ def JSON_Parser_android(object):
     return dic
 
 
+def JSON_Parser_Main(object):
+    json_object = json.loads(object)
+    if json_object[0] == 'Light':
+        dic = JSON_Parser_android(object)
+    else:
+        dic = JSON_Parser(object)
+    return dic
+
+
 def JSON_ENCODE(dic):
     object = {"sender": dic['sender'], "message": dic['message'], "room": dic['room']}
     jsonObject = json.dumps(object)
