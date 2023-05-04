@@ -2,8 +2,8 @@ import paho.mqtt.client as mqtt
 import Network as network
 import MQTT.MQTT_JSON as json
 '''
-User = 'sonjuhy_home'
-Password = "son278298@"
+User = 'user_id'
+Password = "password"
 Host = "192.168.0.254"
 DB = "Home"
 Port = 3306
