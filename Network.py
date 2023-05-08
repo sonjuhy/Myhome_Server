@@ -3,10 +3,10 @@ import pymysql as MySQLdb
 import requests
 import time
 
-User = 'sonjuhy_home'
-Password = "son278298@"
+User = 'DB ID'
+Password = "DB Password"
 Host = "192.168.0.254"
-DB = "Home"
+DB = "table name"
 Port = 3306
 Mode_O = "'OFF'"
 
