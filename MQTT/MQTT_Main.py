@@ -4,12 +4,6 @@ import MQTT.MQTT_JSON as json
 
 
 class MQTTClass:
-    User = 'sonjuhy_home'
-    Password = "son278298@"
-    Host = "192.168.0.254"
-    DB = "Home"
-    Port = 3306
-    Mode_O = "'OFF'"
 
     Room = {'balcony main': 'Off', 'balcony sub': 'Off', 'bathRoom1': 'Off', 'bathRoom2': 'Off',
             'big Room1': 'Off', 'big Room2': 'Off', 'kitchen sink': 'Off'
