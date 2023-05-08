@@ -2,7 +2,7 @@ import json
 
 
 def JSON_Parser(object):
-    print(object)
+    #print(object)
     jsonObject = json.loads(object)
     dic = {'sender': jsonObject['sender'], 'message': jsonObject['message'], 'room': jsonObject['room']}
     return dic
@@ -22,6 +22,12 @@ def JSON_Parser_Main(object):
     else:
         dic = JSON_Parser(object)
     return dic
+
+
+def JSON_ENCODE_TOSERVER(dic):
+    object = {"Light": {"sender": dic[0][1], "message": dic[1][1], "room": dic[2][1], "destination": dic[3][1]}}
+    jsonObject = json.dumps(object)
+    return jsonObject
 
 
 def JSON_ENCODE(dic):

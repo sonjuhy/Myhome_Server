@@ -14,6 +14,7 @@ DoW = ['월', '화', '수', '목', '금', '토', '일']
 
 def ReserveMain(queueToMain):
     print('ReserveMain')
+    reset_check = False
     while True:
         ReserveAdd()
         while True:
@@ -22,10 +23,13 @@ def ReserveMain(queueToMain):
                     print("In Reserve")
                     break
             schedule.run_pending()
-            print(len(schedule.jobs))
-            for i in range(0, len(schedule.jobs)):
-                print(schedule.jobs[i].tag())
             time.sleep(1)
+            now = time.localtime()
+            if now.tm_hour == 20 and now.tm_min == 26 and reset_check is False:
+                reset_check = True
+                break
+            elif now.tm_hour != 20 and now.tm_min != 26 and reset_check is True:
+                reset_check = False
 
 
 def ReserveAdd():
@@ -42,6 +46,8 @@ def ReserveAdd():
                 for j in range(0, len(day)):
                     if DoW[n] == day[j]:
                         run_recode = JobDef(info[i], run_recode)
+    timeinfo = datetime.time(00, 00)
+    schedule.every().day.at(str(timeinfo)).do(JobClear)
     for i in range(0, len(schedule.jobs)):
         print(schedule.jobs[i].at_time)
 
@@ -49,17 +55,18 @@ def ReserveAdd():
 def ReserveMQTT(action, room, repeat, num):
     print("MQTT Reserve")
     result_list = ReserveSQL("LightList")
+    cate = "no data"
     for i in range(0, len(result_list)):
         if room == result_list[i][0]:
             cate = result_list[i][3]
             break
-    dic_object = [('name', 'Server'), ('message', action), ('destination', room), ('room', cate)]
-    object = mqtt_json.JSON_ENCODE_android(dic_object)
+    dic_object = [('name', 'ServerReserve'), ('message', action), ('room', cate), ('destination', room)]
+    object = mqtt_json.JSON_ENCODE_TOSERVER(dic_object)
 
     client = mqtt.Client()
     client.connect("192.168.0.254", 1883)
     client.loop()
-    #client.publish("MyHome/Light/Pub/" + room, object)
+    client.publish("MyHome/Light/Pub/Server", object)
     client.loop_stop()
 
     print(dic_object)
@@ -70,7 +77,6 @@ def ReserveMQTT(action, room, repeat, num):
     if repeat == 'False':
         diction = [('activated', "True"), ('room', num)]
         SQL_Def("ReserveUpdateActivated", diction)
-        #schedule.clear(num)
         ReserveAdd()
 
 
@@ -101,3 +107,4 @@ def JobAdd(time, action, room, repeat, num):
 
 def JobClear():
     schedule.clear()
+
