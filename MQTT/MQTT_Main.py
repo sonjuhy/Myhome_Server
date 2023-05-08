@@ -33,6 +33,7 @@ class MQTTClass:
         print(self.topic)
 
     def on_connect(self, client, user_data, flags, rc):
+        #print("topic in mqtt class : " + self.topic)
         client.subscribe(topic=str(self.topic))
         print("Connected with result code(Sub) : " + str(rc))
 
@@ -53,13 +54,13 @@ class MQTTClass:
 
     def on_message_fromSwitch(self, client, user_data, msg):
         self.payload = msg.payload.decode("utf-8")
-        #print("from switch : " + self.payload)
         if self.payload is not None and self.payload[0] == "{" and self.payload[-1] == "}":
             self.dict = json.JSON_Parser(self.payload)
             if self.dict['sender'] == 'Server':  # return control data part
                 if self.dict['room'] in self.Room:
                     self.Room[self.dict['room']] = "On"
                     network.SQL_Def("Light", self.dict)
+                    #print("room : " + self.dict['room'])
                     if self.dict['room'] == 'small Room':
                         for (room, state) in self.Room.items():
                             self.diction = [('message', state), ('room', room)]
